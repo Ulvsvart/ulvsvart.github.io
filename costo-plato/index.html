@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calculadora de costo y precio de un plato | Ulvsvart</title>
+<meta name="description" content="Calcula el costo por porción y el precio sugerido de un plato a partir de tus ingredientes y el porcentaje de costo que buscas.">
+<link rel="canonical" href="https://ulvsvart.github.io/costo-plato/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CR">
+<meta property="og:site_name" content="Ulvsvart">
+<meta property="og:title" content="Calculadora de costo y precio de un plato">
+<meta property="og:description" content="Costo por porción y precio sugerido según tu porcentaje de costo objetivo.">
+<meta property="og:url" content="https://ulvsvart.github.io/costo-plato/">
+<meta property="og:image" content="https://ulvsvart.github.io/img/recetas/portada-1280x720.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f4efe6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='9' y='9' width='14' height='14' rx='2' transform='rotate(45 16 16)' fill='%231d5a43'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#calculadora">Ir a la calculadora</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../"><i aria-hidden="true"></i>Ulvsvart</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="../#catalogo">Catálogo</a>
+      <a href="../#gratis">Herramientas gratis</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="wrap page-head">
+  <h1>Calculadora de costo y precio de un plato</h1>
+  <p>Anota cada ingrediente con lo que cuesta el paquete, lo que trae y lo que usas en el plato. Usa la misma unidad (gramos, mililitros o unidades) en tamaño y cantidad usada.</p>
+</div>
+
+<div class="wrap calc" id="calculadora">
+  <form class="panel" id="form" novalidate>
+    <h2>Ingredientes</h2>
+    <div id="filas"></div>
+    <div class="toolbar">
+      <button type="button" class="btn ghost small" id="agregar">Agregar ingrediente</button>
+    </div>
+    <h2 style="margin-top:28px">Plato</h2>
+    <div class="fields" style="grid-template-columns:repeat(2,1fr)">
+      <label class="f">Porciones que rinde
+        <input type="number" id="porciones" inputmode="decimal" min="1" step="any" value="4"></label>
+      <label class="f">Costo objetivo (% del precio)
+        <input type="number" id="objetivo" inputmode="decimal" min="1" max="99" step="any" value="30"></label>
+    </div>
+    <p class="note">Un costo objetivo de 30 % significa que los ingredientes son el 30 % del precio de venta.</p>
+  </form>
+
+  <aside class="result" aria-live="polite">
+    <p class="k">Precio sugerido por porción</p>
+    <p class="big" id="out-precio">0.00</p>
+    <dl>
+      <dt>Costo total del plato</dt><dd id="out-total">0.00</dd>
+      <dt>Costo por porción</dt><dd id="out-porcion">0.00</dd>
+      <dt>Ganancia bruta por porción</dt><dd id="out-margen">0.00</dd>
+    </dl>
+  </aside>
+</div>
+
+<div class="wrap">
+  <div class="promo">
+    <p>¿Tienes un menú completo? El Costeo de recetas y menú calcula el costo de cada plato y su margen en un solo libro de Excel.</p>
+    <a class="btn small" href="https://ulvsvart.gumroad.com/l/costeo-recetas-excel">Ver el costeo de recetas (14 USD)</a>
+  </div>
+</div>
+</main>
+
+<footer class="foot-site">
+  <div class="wrap">
+    <span>Ulvsvart. Plantillas en español.</span>
+    <a href="../">Volver a la tienda</a>
+  </div>
+</footer>
+
+<script src="calc.js"></script>
+<script>
+(function () {
+  var cont = document.getElementById('filas');
+  var n = 0;
+  function fila(v) {
+    n++;
+    v = v || {};
+    var d = document.createElement('div');
+    d.className = 'ing';
+    d.innerHTML =
+      '<label class="f name">Ingrediente<input type="text" data-k="nombre" placeholder="Ej. arroz" value="' + (v.nombre || '') + '"></label>' +
+      '<label class="f">Costo del paquete<input type="number" inputmode="decimal" min="0" step="any" data-k="paquete" value="' + (v.paquete || '') + '"></label>' +
+      '<label class="f">Tamaño del paquete<input type="number" inputmode="decimal" min="0" step="any" data-k="tamano" value="' + (v.tamano || '') + '"></label>' +
+      '<label class="f">Cantidad usada<input type="number" inputmode="decimal" min="0" step="any" data-k="usado" value="' + (v.usado || '') + '"></label>' +
+      '<button type="button" class="rm" aria-label="Quitar ingrediente">&times;</button>';
+    cont.appendChild(d);
+  }
+  function filas() {
+    return Array.prototype.map.call(cont.children, function (d) {
+      var o = {};
+      d.querySelectorAll('input').forEach(function (i) { o[i.dataset.k] = i.value; });
+      return o;
+    });
+  }
+  var fmt = new Intl.NumberFormat('es-CR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function calc() {
+    var r = costoPlato(filas(), document.getElementById('porciones').value, document.getElementById('objetivo').value);
+    document.getElementById('out-precio').textContent = fmt.format(r.precio);
+    document.getElementById('out-total').textContent = fmt.format(r.total);
+    document.getElementById('out-porcion').textContent = fmt.format(r.porcion);
+    document.getElementById('out-margen').textContent = fmt.format(r.margen);
+  }
+  document.getElementById('form').addEventListener('input', calc);
+  document.getElementById('form').addEventListener('submit', function (e) { e.preventDefault(); });
+  document.getElementById('agregar').addEventListener('click', function () { fila(); });
+  cont.addEventListener('click', function (e) {
+    if (e.target.classList.contains('rm')) {
+      if (cont.children.length > 1) e.target.closest('.ing').remove();
+      else e.target.closest('.ing').querySelectorAll('input').forEach(function (i) { i.value = ''; });
+      calc();
+    }
+  });
+  fila(); fila(); fila();
+  calc();
+})();
+</script>
+</body>
+</html>

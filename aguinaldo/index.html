@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calculadora de aguinaldo Costa Rica 2026 | Ulvsvart</title>
+<meta name="description" content="Calcula tu aguinaldo en Costa Rica: suma los salarios brutos de diciembre 2025 a noviembre 2026 y divide entre 12. Regla y fecha límite según el MTSS.">
+<link rel="canonical" href="https://ulvsvart.github.io/aguinaldo/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CR">
+<meta property="og:site_name" content="Ulvsvart">
+<meta property="og:title" content="Calculadora de aguinaldo Costa Rica 2026">
+<meta property="og:description" content="Suma los salarios brutos de diciembre 2025 a noviembre 2026 y divide entre 12.">
+<meta property="og:url" content="https://ulvsvart.github.io/aguinaldo/">
+<meta property="og:image" content="https://ulvsvart.github.io/img/finanzas/portada-1280x720.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f4efe6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='9' y='9' width='14' height='14' rx='2' transform='rotate(45 16 16)' fill='%231d5a43'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#calculadora">Ir a la calculadora</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../"><i aria-hidden="true"></i>Ulvsvart</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="../#catalogo">Catálogo</a>
+      <a href="../#gratis">Herramientas gratis</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="wrap page-head">
+  <h1>Calculadora de aguinaldo Costa Rica 2026</h1>
+  <p>Escribe el salario bruto de cada mes, de diciembre de 2025 a noviembre de 2026. El aguinaldo es la suma de los doce meses dividida entre 12.</p>
+</div>
+
+<div class="wrap calc" id="calculadora">
+  <form class="panel" id="form" novalidate>
+    <h2>Salarios brutos por mes (colones)</h2>
+    <div class="fields" id="meses"></div>
+    <div class="toolbar">
+      <button type="button" class="btn ghost small" id="mismo">Mismo salario todos los meses</button>
+      <button type="button" class="btn ghost small" id="limpiar">Borrar todo</button>
+    </div>
+    <p class="note">El botón copia el valor de diciembre 2025 a los otros once meses. Un mes sin salario se cuenta como cero.</p>
+  </form>
+
+  <aside class="result" aria-live="polite">
+    <p class="k">Tu aguinaldo estimado</p>
+    <p class="big" id="out-aguinaldo">₡0</p>
+    <dl>
+      <dt>Suma de salarios</dt><dd id="out-total">₡0</dd>
+      <dt>Meses con salario</dt><dd id="out-meses">0</dd>
+      <dt>Fecha límite de pago</dt><dd>20 de diciembre de 2026</dd>
+    </dl>
+  </aside>
+</div>
+
+<div class="wrap rule">
+  <h2>La regla, según el MTSS</h2>
+  <ul>
+    <li><strong>Periodo:</strong> los doce meses del 1 de diciembre del año anterior al 30 de noviembre del año en curso. Para 2026: del 1 de diciembre de 2025 al 30 de noviembre de 2026.</li>
+    <li><strong>Cálculo:</strong> se suman todos los salarios ordinarios y extraordinarios devengados en ese periodo y el total se divide entre doce.</li>
+    <li><strong>Qué se incluye:</strong> las horas ordinarias y extraordinarias y cualquier otro pago salarial hecho en el periodo; también el salario en especie.</li>
+    <li><strong>Quién tiene derecho:</strong> quien tenga al menos un mes laborado de forma continua para la misma persona empleadora.</li>
+    <li><strong>Fecha límite:</strong> se paga dentro de los primeros veinte días de diciembre; el 20 de diciembre es la fecha límite.</li>
+    <li><strong>Deducciones:</strong> solo puede rebajarse la pensión alimentaria; no se aplican cargas sociales.</li>
+  </ul>
+  <p class="src">Fuente oficial: Ministerio de Trabajo y Seguridad Social (MTSS).
+    <a href="https://www.mtss.go.cr/temas-laborales/aguinaldo/preguntas_frecuentes.pdf">Preguntas frecuentes sobre el aguinaldo</a> y
+    <a href="https://www.mtss.go.cr/prensa/comunicados/2023/noviembre/cp_048_2023.html">comunicado de la campaña Aguinaldo completo y a tiempo</a>.
+    El resultado es una estimación; si hubo incapacidades o permisos sin goce de salario, consulta la fuente.</p>
+</div>
+
+<div class="wrap">
+  <div class="promo">
+    <p>¿Quieres tener el aguinaldo planeado antes de que llegue? El Presupuesto personal por quincenas te ayuda a repartirlo.</p>
+    <a class="btn small" href="https://ulvsvart.gumroad.com/l/presupuesto-quincenal-excel">Ver el presupuesto (7 USD)</a>
+  </div>
+</div>
+</main>
+
+<footer class="foot-site">
+  <div class="wrap">
+    <span>Ulvsvart. Plantillas en español.</span>
+    <a href="../">Volver a la tienda</a>
+  </div>
+</footer>
+
+<script src="calc.js"></script>
+<script>
+(function () {
+  var nombres = ['Diciembre 2025','Enero 2026','Febrero 2026','Marzo 2026','Abril 2026','Mayo 2026','Junio 2026','Julio 2026','Agosto 2026','Septiembre 2026','Octubre 2026','Noviembre 2026'];
+  var box = document.getElementById('meses');
+  nombres.forEach(function (n, i) {
+    var l = document.createElement('label');
+    l.className = 'f';
+    l.innerHTML = n + '<input type="number" inputmode="decimal" min="0" step="any" placeholder="0" data-i="' + i + '">';
+    box.appendChild(l);
+  });
+  var inputs = box.querySelectorAll('input');
+  var fmt = new Intl.NumberFormat('es-CR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+  function money(n) { return '₡' + fmt.format(n); }
+  function calc() {
+    var r = aguinaldo(Array.prototype.map.call(inputs, function (x) { return x.value; }));
+    document.getElementById('out-aguinaldo').textContent = money(r.aguinaldo);
+    document.getElementById('out-total').textContent = money(r.total);
+    document.getElementById('out-meses').textContent = r.meses;
+  }
+  box.addEventListener('input', calc);
+  document.getElementById('mismo').addEventListener('click', function () {
+    var v = inputs[0].value;
+    Array.prototype.forEach.call(inputs, function (x) { x.value = v; });
+    calc();
+  });
+  document.getElementById('limpiar').addEventListener('click', function () {
+    Array.prototype.forEach.call(inputs, function (x) { x.value = ''; });
+    calc();
+  });
+  document.getElementById('form').addEventListener('submit', function (e) { e.preventDefault(); });
+  calc();
+})();
+</script>
+</body>
+</html>
